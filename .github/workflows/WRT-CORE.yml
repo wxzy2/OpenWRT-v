@@ -169,12 +169,12 @@ jobs:
           if [[ "${WRT_CONFIG,,}" == *"test"* ]]; then
             cat $GITHUB_WORKSPACE/Config/$WRT_CONFIG.txt >> .config
           else
-            # 先合并通用配置（在前），再合并自定义配置（在后）
-            cat $GITHUB_WORKSPACE/Config/GENERAL.txt $GITHUB_WORKSPACE/Config/$WRT_CONFIG.txt >> .config
+            # 保持自定义配置在前（锁定机型架构），通用配置在后追加
+            cat $GITHUB_WORKSPACE/Config/$WRT_CONFIG.txt $GITHUB_WORKSPACE/Config/GENERAL.txt >> .config
           fi
 
-          # 【核心修改点】对合并后的 .config 冲突项进行倒序去重，确保以排在后面的自定义配置为准
-          awk -F'=' '/^CONFIG_/{key=$1} /^# CONFIG_/{split($0,a," "); key=a[2]} {lines[NR]=$0; keys[NR]=key} END {for(i=NR;i>0;i--) {if(keys[i]=="" || !seen[keys[i]]++) {out[i]=lines[i]}} for(i=1;i<=NR;i++) {if(i in out) print out[i]}}' .config > .config.tmp && mv .config.tmp .config
+          # 【核心去重逻辑】正向读取，保留先出现的自定义配置，自动丢弃后面通用配置中的冲突行
+          awk -F'=' '/^CONFIG_/{key=$1} /^# CONFIG_/{split($0,a," "); key=a[2]} {if (key == "" || !seen[key]++) {print $0} key=""}' .config > .config.tmp && mv .config.tmp .config
 
           $GITHUB_WORKSPACE/Scripts/Settings.sh
 
