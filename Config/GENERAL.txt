@@ -3,8 +3,6 @@ CONFIG_PACKAGE_luci-app-homeproxy=y
 
 #增加插件
 CONFIG_PACKAGE_luci-app-openclash=y
-CONFIG_PACKAGE_luci-app-mini-diskmanager=y
-CONFIG_PACKAGE_luci-app-partexp=y
 CONFIG_PACKAGE_luci-app-lucky=y
 CONFIG_PACKAGE_luci-app-openlist2=y
 CONFIG_PACKAGE_luci-app-aria2=y
