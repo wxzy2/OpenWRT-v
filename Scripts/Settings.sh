@@ -58,7 +58,13 @@ if [[ "${WRT_TARGET^^}" == *"QUALCOMMAX"* ]]; then
 	fi
 fi
 
-# ==================== 强制切换为 Nginx（最高优先级） ====================
+# ==================== 强制切换为 Nginx（最高优先级，机型配置不可覆盖） ====================
+# 先清除 .config 中所有 uhttpd / nginx 相关行（无论来自机型配置还是通用配置）
+sed -i '/CONFIG_PACKAGE_uhttpd/d' .config
+sed -i '/CONFIG_PACKAGE_nginx/d' .config
+sed -i '/CONFIG_PACKAGE_luci-ssl-nginx/d' .config
+
+# 再统一写入最终值，保证结果唯一
 cat >> .config << EOF
 # 禁用 uhttpd
 CONFIG_PACKAGE_uhttpd=n
