@@ -57,3 +57,18 @@ if [[ "${WRT_TARGET^^}" == *"QUALCOMMAX"* ]]; then
 		echo "qualcommax set up nowifi successfully!"
 	fi
 fi
+
+# ==================== 强制切换为 Nginx（最高优先级） ====================
+cat >> .config << EOF
+# 禁用 uhttpd
+CONFIG_PACKAGE_uhttpd=n
+CONFIG_PACKAGE_uhttpd-mod-ubus=n
+CONFIG_PACKAGE_uhttpd-mod-lua=n
+
+# 启用 Nginx
+CONFIG_PACKAGE_nginx=y
+CONFIG_PACKAGE_nginx-ssl=y
+CONFIG_PACKAGE_nginx-mod-luci=y
+CONFIG_PACKAGE_nginx-mod-ubus=y
+CONFIG_PACKAGE_luci-ssl-nginx=y
+EOF
