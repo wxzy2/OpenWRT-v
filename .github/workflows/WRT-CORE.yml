@@ -180,6 +180,11 @@ jobs:
 
           make defconfig -j$(nproc) && make clean -j$(nproc)
 
+
+          # 强制二次清除 uhttpd（defconfig 可能把它拉回来）
+          sed -i 's/CONFIG_PACKAGE_uhttpd=y/CONFIG_PACKAGE_uhttpd=n/' .config
+          sed -i 's/CONFIG_PACKAGE_uhttpd-mod-ubus=y/CONFIG_PACKAGE_uhttpd-mod-ubus=n/' .config
+
       - name: Download Packages
         if: env.WRT_TEST != 'true'
         run: |
