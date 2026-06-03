@@ -169,21 +169,12 @@ jobs:
           if [[ "${WRT_CONFIG,,}" == *"test"* ]]; then
             cat $GITHUB_WORKSPACE/Config/$WRT_CONFIG.txt >> .config
           else
-            # 保持自定义配置在前（锁定机型架构），通用配置在后追加
             cat $GITHUB_WORKSPACE/Config/$WRT_CONFIG.txt $GITHUB_WORKSPACE/Config/GENERAL.txt >> .config
           fi
-
-          # 【核心去重逻辑】正向读取，保留先出现的自定义配置，自动丢弃后面通用配置中的冲突行
-          awk -F'=' '/^CONFIG_/{key=$1} /^# CONFIG_/{split($0,a," "); key=a[2]} {if (key == "" || !seen[key]++) {print $0} key=""}' .config > .config.tmp && mv .config.tmp .config
 
           $GITHUB_WORKSPACE/Scripts/Settings.sh
 
           make defconfig -j$(nproc) && make clean -j$(nproc)
-
-
-          # 强制二次清除 uhttpd（defconfig 可能把它拉回来）
-          sed -i 's/CONFIG_PACKAGE_uhttpd=y/CONFIG_PACKAGE_uhttpd=n/' .config
-          sed -i 's/CONFIG_PACKAGE_uhttpd-mod-ubus=y/CONFIG_PACKAGE_uhttpd-mod-ubus=n/' .config
 
       - name: Download Packages
         if: env.WRT_TEST != 'true'
