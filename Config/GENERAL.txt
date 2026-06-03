@@ -1,42 +1,53 @@
-#科学插件调整
-CONFIG_PACKAGE_luci-app-homeproxy=y
+# ============================================================
+# 京东云雅典娜 AX6600 (IPQ8074A) 精简 .config
+# ============================================================
 
-#增加插件
+# ------------------------------------------------------------
+# 科学插件调整
+# ------------------------------------------------------------
+CONFIG_PACKAGE_luci-app-homeproxy=y
 CONFIG_PACKAGE_luci-app-openclash=y
+
+# ------------------------------------------------------------
+# 增加插件
+# ------------------------------------------------------------
 CONFIG_PACKAGE_luci-app-ddns-go=y
-#CONFIG_PACKAGE_luci-app-lucky=n
 CONFIG_PACKAGE_luci-app-openlist2=y
 CONFIG_PACKAGE_luci-app-aria2=y
 
-
-#删除插件
+# ------------------------------------------------------------
+# 删除插件
+# ------------------------------------------------------------
 CONFIG_PACKAGE_luci-app-attendedsysupgrade=n
 CONFIG_PACKAGE_luci-app-wol=n
-CONFIG_PACKAGE_luci-app-upnp=n
 
-
-#参数调整
-CONFIG_CCACHE=y
-CONFIG_DEVEL=y
-CONFIG_FEED_video=n
+# ------------------------------------------------------------
+# 编译参数（发布固件去掉 CCACHE/DEVEL）
+# ------------------------------------------------------------
 CONFIG_TARGET_MULTI_PROFILE=y
 CONFIG_TARGET_PER_DEVICE_ROOTFS=y
 CONFIG_TARGET_ROOTFS_INITRAMFS=n
 
-#内核调整-保留项（网络与本地存储）
-CONFIG_PACKAGE_kmod-ata-ahci=y
-CONFIG_PACKAGE_kmod-ata-core=y
+# ------------------------------------------------------------
+# 内核模块 — 网络核心 & NSS 加速
+# ------------------------------------------------------------
+# bonding / veth / tun
 CONFIG_PACKAGE_kmod-bonding=y
-CONFIG_PACKAGE_kmod-dsa=y
-CONFIG_PACKAGE_kmod-dummy=y
-CONFIG_PACKAGE_kmod-fs-btrfs=y
-CONFIG_PACKAGE_kmod-fs-ksmbd=y
-CONFIG_PACKAGE_kmod-fuse=y
+CONFIG_PACKAGE_kmod-veth=y
+CONFIG_PACKAGE_kmod-tun=y
+
+# VPN
+CONFIG_PACKAGE_kmod-wireguard=y
+
+# 网络诊断
 CONFIG_PACKAGE_kmod-inet-diag=y
 CONFIG_PACKAGE_kmod-inet-mptcp-diag=y
-CONFIG_PACKAGE_kmod-mtd-rw=y
 CONFIG_PACKAGE_kmod-netlink-diag=y
+
+# IPv6 NAT
 CONFIG_PACKAGE_kmod-nf-nat6=y
+
+# nftables 完整规则集（NSS offload 路径依赖）
 CONFIG_PACKAGE_kmod-nft-arp=y
 CONFIG_PACKAGE_kmod-nft-bridge=y
 CONFIG_PACKAGE_kmod-nft-connlimit=y
@@ -51,81 +62,93 @@ CONFIG_PACKAGE_kmod-nft-queue=y
 CONFIG_PACKAGE_kmod-nft-socket=y
 CONFIG_PACKAGE_kmod-nft-tproxy=y
 CONFIG_PACKAGE_kmod-nft-xfrm=y
-CONFIG_PACKAGE_kmod-nvme=y
-CONFIG_PACKAGE_kmod-sound-core=y
-CONFIG_PACKAGE_kmod-tun=y
-CONFIG_PACKAGE_kmod-veth=y
 
-#内核调整-关闭项（你用不到的 WireGuard 和整个 USB 驱动链）
-CONFIG_PACKAGE_kmod-wireguard=n
-CONFIG_PACKAGE_kmod-usb3=n
-CONFIG_PACKAGE_kmod-usb-audio=n
-CONFIG_PACKAGE_kmod-usb-core=n
-CONFIG_PACKAGE_kmod-usb-dwc3=n
-CONFIG_PACKAGE_kmod-usb-net=n
-CONFIG_PACKAGE_kmod-usb-net-asix=n
-CONFIG_PACKAGE_kmod-usb-net-asix-ax88179=n
-CONFIG_PACKAGE_kmod-usb-net-cdc-eem=n
-CONFIG_PACKAGE_kmod-usb-net-cdc-ether=n
-CONFIG_PACKAGE_kmod-usb-net-cdc-mbim=n
-CONFIG_PACKAGE_kmod-usb-net-cdc-ncm=n
-CONFIG_PACKAGE_kmod-usb-net-cdc-subset=n
-CONFIG_PACKAGE_kmod-usb-net-huawei-cdc-ncm=n
-CONFIG_PACKAGE_kmod-usb-net-ipheth=n
-CONFIG_PACKAGE_kmod-usb-net-qmi-wwan=n
-CONFIG_PACKAGE_kmod-usb-net-qmi-wwan-fibocom=n
-CONFIG_PACKAGE_kmod-usb-net-qmi-wwan-quectel=n
-CONFIG_PACKAGE_kmod-usb-net-rndis=n
-CONFIG_PACKAGE_kmod-usb-net-rtl8150=n
-CONFIG_PACKAGE_kmod-usb-net-rtl8152=n
-CONFIG_PACKAGE_kmod-usb-net-sierrawireless=n
-CONFIG_PACKAGE_kmod-usb-ohci=n
-CONFIG_PACKAGE_kmod-usb-storage=n
-CONFIG_PACKAGE_kmod-usb-storage-extras=n
-CONFIG_PACKAGE_kmod-usb-storage-uas=n
-CONFIG_PACKAGE_kmod-usb-uhci=n
-CONFIG_PACKAGE_kmod-usb-xhci=n
+# ------------------------------------------------------------
+# 内核模块 — IPQ8074A 平台专属
+# ------------------------------------------------------------
+# DSA 交换芯片（QCA8337，删掉 LAN 口全废）
+CONFIG_PACKAGE_kmod-dsa=y
 
-#组件调整-保留项（系统、网络与本地磁盘工具）
-CONFIG_PACKAGE_autocore=y
-CONFIG_PACKAGE_automount=y
-CONFIG_PACKAGE_blkid=y
-CONFIG_PACKAGE_cfdisk=y
-CONFIG_PACKAGE_cgdisk=y
-CONFIG_PACKAGE_coremark=y
-CONFIG_PACKAGE_cpufreq=y
-CONFIG_PACKAGE_curl=y
-CONFIG_PACKAGE_dmesg=y
-CONFIG_PACKAGE_exfat-fsck=y
-CONFIG_PACKAGE_exfat-mkfs=y
-CONFIG_PACKAGE_fdisk=y
-CONFIG_PACKAGE_gdisk=y
-CONFIG_PACKAGE_htop=y
-CONFIG_PACKAGE_iperf3=y
-CONFIG_PACKAGE_ip-full=y
-CONFIG_PACKAGE_lsblk=y
+# USB 3.0（机器有物理 USB 3.0 口）
+CONFIG_PACKAGE_kmod-usb-core=y
+CONFIG_PACKAGE_kmod-usb3=y
+CONFIG_PACKAGE_kmod-usb-xhci=y
+
+# USB 存储
+CONFIG_PACKAGE_kmod-usb-storage=y
+CONFIG_PACKAGE_kmod-usb-storage-uas=y
+CONFIG_PACKAGE_kmod-usb-storage-extras=y
+
+# 文件系统
+CONFIG_PACKAGE_kmod-fs-btrfs=y
+CONFIG_PACKAGE_kmod-fuse=y
+
+# ------------------------------------------------------------
+# 内核模块 — 已删除（AX6600 无对应硬件）
+# ------------------------------------------------------------
+# kmod-ata-ahci          — 无 SATA
+# kmod-ata-core          — 无 SATA
+# kmod-nvme              — 无 NVMe
+# kmod-sound-core        — 无声卡
+# kmod-usb-audio         — 无声卡
+# kmod-mtd-rw            — eMMC 设备无 MTD
+# kmod-ovpn-backports    — 已有 WireGuard
+# kmod-fs-ksmbd          — 用 Samba 用户空间足够
+# kmod-dummy             — 按需手动添加
+# kmod-usb-net-*全系     — 无 USB 网卡/4G 需求
+# kmod-usb-dwc3          — IPQ8074A 用 xhci，非 dwc3
+
+# ------------------------------------------------------------
+# 组件 — LuCI 基础
+# ------------------------------------------------------------
 CONFIG_PACKAGE_luci-base=y
 CONFIG_PACKAGE_luci-compat=y
 CONFIG_PACKAGE_luci-lib-base=y
 CONFIG_PACKAGE_luci-lib-ipkg=y
 CONFIG_PACKAGE_luci-lua-runtime=y
 CONFIG_PACKAGE_luci-proto-relay=y
+
+# ------------------------------------------------------------
+# 组件 — 系统工具
+# ------------------------------------------------------------
+CONFIG_PACKAGE_autocore=y
+CONFIG_PACKAGE_automount=y
+CONFIG_PACKAGE_blkid=y
+CONFIG_PACKAGE_cpufreq=y
+CONFIG_PACKAGE_curl=y
+CONFIG_PACKAGE_dmesg=y
+CONFIG_PACKAGE_htop=y
+CONFIG_PACKAGE_iperf3=y
+CONFIG_PACKAGE_ip-full=y
+CONFIG_PACKAGE_lsblk=y
 CONFIG_PACKAGE_mmc-utils=y
-CONFIG_PACKAGE_nand-utils=y
-CONFIG_PACKAGE_nvme-cli=y
-CONFIG_PACKAGE_libnvme=y
-CONFIG_PACKAGE_openssh-keygen=y
-CONFIG_PACKAGE_openssh-sftp-server=y
 CONFIG_PACKAGE_openssl-util=y
+CONFIG_PACKAGE_openssh-sftp-server=y
 CONFIG_PACKAGE_proto-bonding=y
-CONFIG_PACKAGE_sfdisk=y
-CONFIG_PACKAGE_sgdisk=y
-CONFIG_PACKAGE_smartmontools=y
-CONFIG_PACKAGE_smartmontools-drivedb=y
 CONFIG_PACKAGE_xz-utils=y
 
-#组件调整-关闭项（依赖 USB 的上层应用组件）
-CONFIG_PACKAGE_libimobiledevice=n
-CONFIG_PACKAGE_usbmuxd=n
-CONFIG_PACKAGE_usb-modeswitch=n
-CONFIG_PACKAGE_usbutils=n
+# eMMC/USB 存储格式支持
+CONFIG_PACKAGE_exfat-fsck=y
+CONFIG_PACKAGE_exfat-mkfs=y
+
+# USB 硬盘健康监控（接外置硬盘时有用）
+CONFIG_PACKAGE_smartmontools=y
+CONFIG_PACKAGE_smartmontools-drivedb=y
+
+# eMMC 管理
+CONFIG_PACKAGE_nand-utils=y
+
+# ------------------------------------------------------------
+# 组件 — 已删除
+# ------------------------------------------------------------
+# cfdisk / cgdisk / fdisk / gdisk / sfdisk / sgdisk  — eMMC 不需要现场分区
+# coremark             — CPU 跑分，编译完无用
+# libnvme              — 无 NVMe
+# nvme-cli             — 无 NVMe
+# usb-modeswitch       — 无 4G 模块切换需求
+# usbmuxd              — 无 iOS 共享需求
+# usbutils             — 调试用，按需手动加
+# libimobiledevice     — 无 iOS 设备共享需求
+# CONFIG_FEED_video=n  — 路由器无需视频 feed
+# CONFIG_CCACHE=y      — 发布固件去掉
+# CONFIG_DEVEL=y       — 发布固件去掉
