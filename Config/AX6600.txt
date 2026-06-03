@@ -1,0 +1,4 @@
+# 京东云雅典娜 AX6600 (IPQ8074A)
+CONFIG_TARGET_qualcommax=y
+CONFIG_TARGET_qualcommax_ipq8074x=y
+CONFIG_TARGET_DEVICE_qualcommax_ipq8074x_DEVICE_jdcloud_ax6600=y
