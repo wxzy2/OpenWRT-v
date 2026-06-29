@@ -59,8 +59,9 @@ fi
 
 #设备专属覆盖（追加在最后，确保覆盖GENERAL通用配置）
 if [[ "${WRT_CONFIG^^}" == *"360V6"* ]]; then
-	echo "CONFIG_PACKAGE_luci-app-openlist2=n" >> ./.config
-	echo "CONFIG_PACKAGE_luci-app-aria2=n" >> ./.config
+    echo "CONFIG_PACKAGE_luci-app-openlist2=n" >> ./.config
+    echo "CONFIG_PACKAGE_luci-app-aria2=n" >> ./.config
+    echo "CONFIG_PACKAGE_luci-app-timecontrol=n" >> ./.config
 fi
 
 #高通平台调整
