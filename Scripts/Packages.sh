@@ -72,6 +72,8 @@ UPDATE_PACKAGE "mosdns" "sbwml/luci-app-mosdns" "v5" "" "v2dat"
 UPDATE_PACKAGE "netspeedtest" "sirpdboy/netspeedtest" "main" "" "homebox ookla-speedtest"
 UPDATE_PACKAGE "netwizard" "sirpdboy/luci-app-netwizard" "main"
 
+# runc 包 description 多行文本触发 tmp/.config-package.in 解析报错，未被选用，直接移除
+rm -rf ../feeds/packages/utils/runc
 # openlist2 上游要求较新版本 golang，锁定 golang feed 版本以避免编译失败
 UPDATE_PACKAGE "golang" "sbwml/packages_lang_golang" "26.x" "name"
 UPDATE_PACKAGE "openlist2" "sbwml/luci-app-openlist2" "main"
