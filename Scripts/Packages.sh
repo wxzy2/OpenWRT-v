@@ -71,7 +71,11 @@ UPDATE_PACKAGE "easytier" "EasyTier/luci-app-easytier" "main"
 UPDATE_PACKAGE "mosdns" "sbwml/luci-app-mosdns" "v5" "" "v2dat"
 UPDATE_PACKAGE "netspeedtest" "sirpdboy/netspeedtest" "main" "" "homebox ookla-speedtest"
 UPDATE_PACKAGE "netwizard" "sirpdboy/luci-app-netwizard" "main"
+
+# openlist2 上游要求较新版本 golang，锁定 golang feed 版本以避免编译失败
+UPDATE_PACKAGE "golang" "sbwml/packages_lang_golang" "26.x" "name"
 UPDATE_PACKAGE "openlist2" "sbwml/luci-app-openlist2" "main"
+
 UPDATE_PACKAGE "partexp" "sirpdboy/luci-app-partexp" "main"
 UPDATE_PACKAGE "qbittorrent" "sbwml/luci-app-qbittorrent" "master" "" "qt6base qt6tools rblibtorrent"
 UPDATE_PACKAGE "qmodem" "FUjr/QModem" "main"
