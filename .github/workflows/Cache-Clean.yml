@@ -4,23 +4,26 @@
 name: Cache-Clean
 
 on:
-  #自动清理：每周一早上4点
- # schedule:
-   # - cron: 0 20 * * 0
-  #手动清理
+  # 自动清理：每周一北京时间 04:00
+  # schedule:
+  #   - cron: '0 20 * * 0'
+
+  # 手动清理
   workflow_dispatch:
 
-permissions: write-all
+permissions:
+  actions: write
 
 env:
-  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   cleanup:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Projects
-        uses: actions/checkout@main
 
+    steps:
       - name: Cache Clean
-        run: gh cache delete --all
+        run: |
+          echo "开始清理 GitHub Actions Cache..."
+          gh cache delete --all || true
+          echo "Cache 清理完成"
